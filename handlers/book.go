@@ -1,5 +1,3 @@
-// handlers/book.go
-
 package handlers
 
 import (
@@ -15,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// GetBooks retrieves all books from the MongoDB collection
+// GetBooks
 func GetBooks(c *gin.Context) {
 	var books []models.Book
 	collection := database.GetClient().Database("bookstore").Collection("books")
@@ -28,7 +26,6 @@ func GetBooks(c *gin.Context) {
 	}
 	defer cursor.Close(context.Background())
 
-	// Decode all books into the books slice
 	if err = cursor.All(context.Background(), &books); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error decoding books"})
 		return
@@ -37,7 +34,7 @@ func GetBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
-// PostBooks inserts a new book into the MongoDB collection
+// PostBooks
 func PostBooks(c *gin.Context) {
 	var book models.Book
 	if err := c.ShouldBindJSON(&book); err != nil {
@@ -57,7 +54,7 @@ func PostBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"insertedID": result.InsertedID})
 }
 
-// GetBookByID retrieves a book by its ID from the MongoDB collection
+// GetBookByID
 func GetBookByID(c *gin.Context) {
 	id := c.Param("id")
 	objectID, err := primitive.ObjectIDFromHex(id)
@@ -82,7 +79,7 @@ func GetBookByID(c *gin.Context) {
 	c.JSON(http.StatusOK, book)
 }
 
-// UpdateBook updates an existing book by its ID
+// UpdateBook updates
 func UpdateBook(c *gin.Context) {
 	id := c.Param("id")
 	objectID, err := primitive.ObjectIDFromHex(id)

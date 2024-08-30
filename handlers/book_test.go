@@ -1,5 +1,3 @@
-// handlers/book_test.go
-
 package handlers
 
 import (
@@ -85,12 +83,13 @@ func TestPostBooks(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
+	// ------- copy and past from search ---------
 	var response map[string]interface{}
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 	if err != nil {
 		t.Fatalf("Failed to unmarshal response body: %v", err)
 	}
-
+	// ---------------
 	_, ok := response["insertedID"]
 	insertedID, ok := response["insertedID"].(string)
 	assert.True(t, ok)
@@ -103,7 +102,6 @@ func TestGetBookByID(t *testing.T) {
 
 	clearCollection()
 
-	// Insert a book to be retrieved
 	collection := database.GetClient().Database("bookstore").Collection("books")
 	testBook := models.Book{
 		Title:  "Test Book",
@@ -115,10 +113,8 @@ func TestGetBookByID(t *testing.T) {
 		t.Fatalf("Failed to insert test book: %v", err)
 	}
 
-	// Get the ID of the inserted book
 	bookID := insertResult.InsertedID.(primitive.ObjectID).Hex()
 
-	// Perform the GET request
 	r := setupRouter()
 	req, _ := http.NewRequest("GET", "/books/"+bookID, nil)
 	w := httptest.NewRecorder()

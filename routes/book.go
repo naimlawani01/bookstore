@@ -1,5 +1,3 @@
-// routes/book.go
-
 package routes
 
 import (
